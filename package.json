@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"node backend/server.js\" \"vite\"",
-    "build": "vite build",
+    "build": "npm install && npm run build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "node backend/server.js"
+    "start": "npm start"
   },
   "dependencies": {
     "@babel/parser": "^7.29.0",
