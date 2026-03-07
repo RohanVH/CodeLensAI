@@ -1,0 +1,79 @@
+:root {
+  --font-ui: 'Sora', 'Avenir Next', 'Segoe UI', sans-serif;
+  --bg-main: #eaf1fb;
+  --bg-gradient-top: #f8fbff;
+  --bg-gradient-bottom: #eaf1fb;
+  --bg-radial-left: #ffffff;
+  --bg-radial-right: #dbeafe;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --pane-bg: rgba(255, 255, 255, 0.78);
+  --pane-border: rgba(255, 255, 255, 0.8);
+  --pane-shadow: 0 14px 36px rgba(15, 23, 42, 0.1);
+  --section-bg: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  --section-border: #dbe6f4;
+  --accent-primary: #0f766e;
+  --accent-secondary: #0284c7;
+  --muted-btn-bg: #f8fafc;
+  --muted-btn-text: #075985;
+  --muted-btn-border: #bfdbfe;
+  --scroll-track: #e2e8f0;
+  --scroll-thumb: #94a3b8;
+  --active-word-bg: #fef08a;
+  --active-word-text: #111827;
+}
+
+:root[data-theme='dark'] {
+  --bg-main: #0b1220;
+  --bg-gradient-top: #0f172a;
+  --bg-gradient-bottom: #020617;
+  --bg-radial-left: #1e293b;
+  --bg-radial-right: #0b223a;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --pane-bg: rgba(15, 23, 42, 0.78);
+  --pane-border: rgba(51, 65, 85, 0.8);
+  --pane-shadow: 0 16px 36px rgba(2, 6, 23, 0.52);
+  --section-bg: linear-gradient(180deg, #111827 0%, #0f172a 100%);
+  --section-border: #334155;
+  --accent-primary: #14b8a6;
+  --accent-secondary: #0ea5e9;
+  --muted-btn-bg: #0f172a;
+  --muted-btn-text: #bae6fd;
+  --muted-btn-border: #334155;
+  --scroll-track: #1e293b;
+  --scroll-thumb: #64748b;
+  --active-word-bg: #22d3ee;
+  --active-word-text: #082f49;
+}
+
+:root {
+  font-family: var(--font-ui);
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--text-primary);
+  background-color: var(--bg-main);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  color: var(--text-primary);
+  background:
+    radial-gradient(circle at 15% 15%, var(--bg-radial-left) 0%, transparent 42%),
+    radial-gradient(circle at 85% 84%, var(--bg-radial-right) 0%, transparent 44%),
+    linear-gradient(180deg, var(--bg-gradient-top) 0%, var(--bg-gradient-bottom) 100%);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
