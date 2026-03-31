@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"node backend/server.js\" \"vite\"",
-    "build": "npm install && npm run build",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "npm start"
+    "start": "node backend/server.js"
   },
   "dependencies": {
     "@babel/parser": "^7.29.0",
@@ -30,6 +30,7 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
-    "vite": "^7.3.1"
+    "vite": "^7.3.1",
+    "concurrently": "^8.2.0"
   }
 }
