@@ -4,4 +4,4 @@ README.md
 .gitignore
 .eslint*
 eslint.config.js
-.env
+
