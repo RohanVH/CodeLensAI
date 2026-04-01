@@ -8,6 +8,14 @@
       "dest": "/backend/server.js"
     },
     {
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
+    },
+    {
+      "src": "/(.+\\.)([a-z]+)$",
+      "dest": "/$1$2"
+    },
+    {
       "src": "/(.*)",
       "dest": "/index.html"
     }
