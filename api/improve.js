@@ -14,6 +14,8 @@ Rules:
 - Keep output practical and production friendly.`
 
 export default async function handler(req, res) {
+  console.log('API HIT: /api/improve')
+  
   setCorsHeaders(res)
 
   // Handle CORS preflight
@@ -34,17 +36,20 @@ export default async function handler(req, res) {
 
   const groqApiKey = process.env.GROQ_API_KEY
   if (!groqApiKey) {
+    console.error('GROQ_API_KEY is not set')
     return res.status(500).json({
       error: 'GROQ_API_KEY is not configured. Add it to your Vercel environment variables.',
     })
   }
 
   try {
+    console.log('Calling fetchGroqJson...')
     const parsed = await fetchGroqJson({
       groqApiKey,
       systemContent: improvePrompt,
       userContent: `Improve and optimize this code:\n\n${code}`,
     })
+    console.log('Improvement successful')
     return res.status(200).json(toImproveShape(parsed))
   } catch (error) {
     console.error('Error in /api/improve:', error)

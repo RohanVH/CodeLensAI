@@ -10,6 +10,8 @@ Rules:
 - No markdown, no extra keys.`
 
 export default async function handler(req, res) {
+  console.log('API HIT: /api/program-title')
+  
   setCorsHeaders(res)
 
   // Handle CORS preflight
@@ -30,17 +32,20 @@ export default async function handler(req, res) {
 
   const groqApiKey = process.env.GROQ_API_KEY
   if (!groqApiKey) {
+    console.error('GROQ_API_KEY is not set')
     return res.status(500).json({
       error: 'GROQ_API_KEY is not configured. Add it to your Vercel environment variables.',
     })
   }
 
   try {
+    console.log('Calling fetchGroqJson...')
     const parsed = await fetchGroqJson({
       groqApiKey,
       systemContent: titlePrompt,
       userContent: `Create a concise title for this code:\n\n${code}`,
     })
+    console.log('Title detection successful')
     return res.status(200).json(toTitleShape(parsed))
   } catch (error) {
     console.error('Error in /api/program-title:', error)
