@@ -1,35 +1,49 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? (typeof window !== 'undefined' && window.location.hostname === 'localhost' ? 'http://localhost:3001' : '')
+// Automatically use relative paths in production, localhost in development
+const getApiBaseUrl = () => {
+  if (typeof window === 'undefined') return ''
+  
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    return 'http://localhost:3001'
+  }
+  
+  return ''
+}
+
+const API_BASE_URL = getApiBaseUrl()
 
 const postCode = async (endpoint, code) => {
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ code }),
-  })
+  const url = `${API_BASE_URL}${endpoint}`
+  
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ code }),
+    })
 
-  if (!response.ok) {
-    const raw = await response.text().catch(() => '')
-    let message = 'Request failed.'
+    if (!response.ok) {
+      const raw = await response.text().catch(() => '')
+      let message = `Request failed with status ${response.status}.`
 
-    if (raw) {
-      if (raw.includes('Cannot POST /api/improve')) {
-        throw new Error('Improve endpoint is unavailable on backend. Restart backend using: node backend/server.js')
+      if (raw) {
+        try {
+          const payload = JSON.parse(raw)
+          message = payload.error || payload.message || raw
+        } catch {
+          message = raw || message
+        }
       }
 
-      try {
-        const payload = JSON.parse(raw)
-        message = payload.error || payload.message || raw
-      } catch {
-        message = raw
-      }
+      throw new Error(message)
     }
 
-    throw new Error(message)
+    return response.json()
+  } catch (error) {
+    console.error(`Error calling ${endpoint}:`, error)
+    throw error
   }
-
-  return response.json()
 }
 
 export const explainCode = async (code) => {
