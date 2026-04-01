@@ -5,10 +5,10 @@ import ExplanationPanel from './components/ExplanationPanel'
 import AuthModal from './components/AuthModal'
 import TourGuide from './components/TourGuide'
 import GraphView from './components/GraphView'
-import { detectProgramTitleApi, explainCode, improveCode } from './api/explain'
+import { detectProgramTitleApi, explainCode, improveCode } from './services/apiClient'
 import { auth, googleProvider, githubProvider, hasFirebaseConfig } from './auth/firebase'
 import { analyzeCodeStructure } from './analysis/codeAnalysis'
-import { detectGithubUrl, fetchGithubFile, getGithubSourceMeta } from './utils/githubFetcher'
+import { detectGithubUrl, fetchGithubFile, getGithubSourceMeta } from '../lib/githubFetcher.js'
 import './App.css'
 
 const btnStyles = {
@@ -323,7 +323,7 @@ function App() {
         complexityExplanation: data.complexityExplanation || prev?.complexityExplanation || '',
       }))
     } catch (err) {
-      setError(err.message || 'Improve request failed. Restart backend and try again.')
+      setError(err.message || 'Improve request failed. Please try again.')
     } finally {
       setStatusMessage('')
       setLoading(false)

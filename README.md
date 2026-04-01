@@ -34,7 +34,7 @@ CodeLensAI is an AI-powered developer workspace where you can paste code (or a p
 - Editor: Monaco (`@monaco-editor/react`)
 - Graphs: Cytoscape.js
 - AST Parsing: `@babel/parser`
-- Backend: Node.js + Express
+- Backend: Vercel Serverless Functions
 - AI Provider: Groq API (Llama model)
 - Auth: Firebase Authentication (Google + GitHub OAuth)
 
@@ -42,13 +42,18 @@ CodeLensAI is an AI-powered developer workspace where you can paste code (or a p
 
 ```txt
 CodeLensAI/
-  backend/
-    server.js
+  api/
+    explain.js
+    improve.js
+    program-title.js
+  lib/
+    githubFetcher.js
+    utils.js
   src/
     analysis/
       codeAnalysis.js
-    api/
-      explain.js
+    services/
+      apiClient.js
     auth/
       firebase.js
     components/
@@ -57,8 +62,6 @@ CodeLensAI/
       GraphView.jsx
       AuthModal.jsx
       TourGuide.jsx
-    utils/
-      githubFetcher.js
     App.jsx
     App.css
     index.css
@@ -89,8 +92,6 @@ VITE_FIREBASE_MESSAGING_SENDER_ID=...
 VITE_FIREBASE_APP_ID=...
 VITE_FIREBASE_MEASUREMENT_ID=...
 
-# Optional frontend API base override
-# VITE_API_BASE_URL=http://localhost:3001
 ```
 
 ## Firebase Setup Checklist
@@ -109,12 +110,6 @@ npm install
 ```
 
 ## Run Locally
-
-Start backend:
-
-```bash
-node backend/server.js
-```
 
 Start frontend:
 
@@ -167,7 +162,7 @@ All endpoints accept:
 
 - Call Graph/Data Flow are strongest for JavaScript/TypeScript-style source.
 - GitHub file analysis requires public repository files.
-- If `Improve Code` returns `Cannot POST /api/improve`, restart backend.
+- If `Improve Code` fails on Vercel, verify `GROQ_API_KEY` is configured in the Vercel project environment.
 - If Firebase OAuth shows configuration errors, re-check enabled providers and authorized domains.
 
 ## Security

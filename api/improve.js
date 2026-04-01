@@ -1,4 +1,4 @@
-import { fetchGroqJson, toImproveShape, setCorsHeaders } from './utils.js'
+import { fetchGroqJson, setCorsHeaders, toImproveShape } from '../lib/utils.js'
 
 const improvePrompt = `You are a principal engineer focused on performance and code quality.
 Return strict JSON only with these keys:
@@ -14,45 +14,54 @@ Rules:
 - Keep output practical and production friendly.`
 
 export default async function handler(req, res) {
-  console.log('API HIT: /api/improve')
-  
+  console.log('API HIT /api/improve')
+
   setCorsHeaders(res)
 
-  // Handle CORS preflight
   if (req.method === 'OPTIONS') {
     res.status(200).end()
     return
   }
 
   if (req.method !== 'POST') {
+    res.setHeader('Allow', 'POST, OPTIONS')
     return res.status(405).json({ error: 'Method Not Allowed. Use POST.' })
   }
 
-  const { code } = req.body || {}
-
-  if (!code || typeof code !== 'string') {
-    return res.status(400).json({ error: 'Request must include a "code" string.' })
-  }
-
-  const groqApiKey = process.env.GROQ_API_KEY
-  if (!groqApiKey) {
-    console.error('GROQ_API_KEY is not set')
-    return res.status(500).json({
-      error: 'GROQ_API_KEY is not configured. Add it to your Vercel environment variables.',
-    })
-  }
-
   try {
-    console.log('Calling fetchGroqJson...')
+    const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body
+    const { code } = body || {}
+
+    if (typeof code !== 'string' || !code.trim()) {
+      return res.status(400).json({ error: 'Request must include a non-empty "code" string.' })
+    }
+
+    const groqApiKey = process.env.GROQ_API_KEY
+    if (!groqApiKey) {
+      console.error('GROQ_API_KEY is not set for /api/improve')
+      return res.status(500).json({
+        error: 'GROQ_API_KEY is not configured. Add it to your Vercel environment variables.',
+      })
+    }
+
+    console.log('Calling Groq for /api/improve')
     const parsed = await fetchGroqJson({
       groqApiKey,
       systemContent: improvePrompt,
       userContent: `Improve and optimize this code:\n\n${code}`,
     })
-    console.log('Improvement successful')
+
+    console.log('Groq response parsed for /api/improve')
     return res.status(200).json(toImproveShape(parsed))
   } catch (error) {
     console.error('Error in /api/improve:', error)
-    return res.status(502).json({ error: error.message || 'Unexpected server error.' })
+
+    if (error instanceof SyntaxError) {
+      return res.status(400).json({ error: 'Request body must be valid JSON.' })
+    }
+
+    return res.status(502).json({
+      error: error.message || 'Unexpected server error.',
+    })
   }
 }
